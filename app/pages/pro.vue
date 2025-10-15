@@ -13,7 +13,7 @@
           <!-- Account section updated for consistency -->
           <div v-if="isMounted && user" class="flex items-center gap-2">
             <span class="text-sm text-slate-600 truncate max-w-28 sm:max-w-40" :title="user.email">
-                {{ truncatedEmail }}
+                {{ truncateText(user?.email) }}
             </span>
             <button @click="handleLogout" class="rounded-xl border border-slate-200 px-3 py-1.5 text-sm hover:bg-slate-50">Log out</button>
           </div>
@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import FeedTab from '~/components/pro/FeedTab.vue';
 import BookmarksTab from '~/components/pro/BookmarksTab.vue';
 import AnalyticsTab from '~/components/pro/AnalyticsTab.vue';
@@ -91,15 +91,6 @@ const tabs = [
   { id: 'settings', name: 'Settings' },
 ];
 
-// Added computed property to truncate email
-const truncatedEmail = computed(() => {
-    if (!user.value?.email) return '';
-    const email = user.value.email;
-    if (email.length > 20) {
-        return email.substring(0, 17) + '...';
-    }
-    return email;
-});
 
 const handleLogout = async () => {
   const { error } = await client.auth.signOut();

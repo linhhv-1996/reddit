@@ -80,13 +80,6 @@ import { ref, computed } from 'vue';
 
 const emit = defineEmits(['apply-filters', 'reset-filters']);
 
-const defaultFilters = {
-  keyword: '',
-  subreddit: '',
-  intent: '',
-  minScore: '40',
-  sortBy: 'score',
-};
 
 const localFilters = ref({ ...defaultFilters });
 

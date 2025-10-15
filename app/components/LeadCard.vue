@@ -7,9 +7,9 @@
       <div class="flex items-center gap-2 flex-wrap">
         <span class="badge">r/{{ lead.subreddit }}</span>
         <span class="badge">Intent: {{ lead.intent }}</span>
-        <span class="badge" :class="scoreBadgeClass">Score: {{ lead.score }}</span>
+        <span class="badge" :class="getScoreBadgeClass(lead.score)">Score: {{ lead.score }}</span>
       </div>
-      <div class="text-[11px] text-slate-500 flex-shrink-0">{{ formattedPostedAt }}</div>
+      <div class="text-[11px] text-slate-500 flex-shrink-0">{{ formatPostedAt(lead.posted_at) }}</div>
     </div>
 
     <div class="mt-2">
@@ -41,10 +41,6 @@
 
 <script setup>
 import { computed } from 'vue'
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-
-dayjs.extend(relativeTime)
 
 const props = defineProps({
   lead: {
@@ -57,27 +53,6 @@ defineEmits(['view-details'])
 
 const isDiamond = computed(() => props.lead.score >= 92);
 
-const scoreBadgeClass = computed(() => {
-  if (props.lead.score >= 90) {
-    return 'bg-mint/80 border-mint text-ink font-bold';
-  }
-  if (props.lead.score > 80) {
-    return 'bg-banana/80 border-banana text-ink font-semibold';
-  }
-  return '';
-});
-
-const formattedPostedAt = computed(() => {
-  const now = dayjs()
-  const postTime = dayjs(props.lead.posted_at)
-  const diffInHours = now.diff(postTime, 'hour')
-
-  if (diffInHours < 24) {
-    return postTime.fromNow()
-  } else {
-    return postTime.format('DD/MM/YYYY')
-  }
-})
 </script>
 
 <style scoped>

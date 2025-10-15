@@ -82,17 +82,10 @@ function handleSetFeedback({ leadId, type }) {
 }
 
 // --- Data Fetching & Filtering ---
-const defaultFilters = {
-  keyword: '',
-  subreddit: '',
-  intent: '',
-  minScore: '40',
-  sortBy: 'score',
-};
+
 const filters = ref({ ...defaultFilters });
 
 const currentPage = ref(1);
-const pageSize = 5;
 
 const apiUrl = computed(() => {
   const params = new URLSearchParams({

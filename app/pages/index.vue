@@ -18,7 +18,7 @@
 
                 <div v-else-if="profile.subscription_status !== 'pro'" class="flex items-center gap-2">
                   <span class="text-sm text-slate-600 truncate max-w-28 sm:max-w-40" :title="user.email">
-                    {{ truncatedEmail }}
+                    {{ truncateText(user?.email) }}
                   </span>
                   <button @click="handleLogout" class="rounded-xl border border-slate-200 px-3 py-1.5 text-sm hover:bg-slate-50">
                     Log out
@@ -197,13 +197,7 @@ watchEffect(async () => {
   }
 });
 
-const truncatedEmail = computed(() => {
-  const email = user.value?.email || '';
-  return email.length > 20 ? email.slice(0, 17) + '...' : email;
-});
-
 // Pagination
-const pageSize = 5;
 const currentPage = ref(1);
 const apiUrl = computed(() => `/api/leads?page=${currentPage.value}&pageSize=${pageSize}`);
 

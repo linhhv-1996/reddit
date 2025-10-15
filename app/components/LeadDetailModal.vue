@@ -10,7 +10,7 @@
             <div class="mt-1 flex items-center gap-2 flex-wrap">
               <span class="badge bg-white">r/{{ lead.subreddit }}</span>
               <span v-if="lead.intent" class="badge bg-white">Intent: {{ lead.intent }}</span>
-              <span class="badge" :class="scoreBadgeClass">Score: {{ lead.score }}</span>
+              <span class="badge" :class="getScoreBadgeClass(lead.score)">Score: {{ lead.score }}</span>
             </div>
           </div>
           <button @click="$emit('close')" class="rounded-md border border-slate-200 px-2 py-1 text-xs hover:bg-slate-50">Esc</button>
@@ -77,7 +77,7 @@
 <script setup>
 import { computed } from 'vue';
 
-// LUÔN LUÔN dùng `const props = defineProps(...)` để giữ reactivity
+
 const props = defineProps({
   show: Boolean,
   lead: { type: Object, default: null },
@@ -87,26 +87,6 @@ const props = defineProps({
 });
 
 defineEmits(['close', 'openProModal', 'toggleBookmark', 'setFeedback']);
-
-// LOGIC CUỐI CÙNG VÀ AN TOÀN TUYỆT ĐỐI
-const scoreBadgeClass = computed(() => {
-  // 1. Kiểm tra sự tồn tại của `props.lead` để tránh lỗi "cannot read properties of null"
-  if (!props.lead) {
-    return 'bg-white';
-  }
-  
-  const score = Number(props.lead.score);
-
-  if (score > 90) {
-    return 'bg-mint/80 border-mint text-ink font-bold';
-  }
-  if (score > 80) {
-    return 'bg-banana/80 border-banana text-ink font-semibold';
-  }
-  
-  // 2. Mặc định trả về `bg-white` để đảm bảo badge luôn có màu nền.
-  return 'bg-white';
-});
 
 
 const truncatedAiReasoning = computed(() => {

@@ -4,9 +4,9 @@
       <div class="flex items-center gap-2 flex-wrap">
         <span class="badge">{{ lead.subreddit }}</span>
         <span v-if="lead.intent" class="badge">Intent: {{ lead.intent }}</span>
-        <span class="badge" :class="scoreBadgeClass">Score: {{ lead.score }}</span>
+        <span class="badge" :class="getScoreBadgeClass(lead.score)">Score: {{ lead.score }}</span>
       </div>
-      <div class="text-[11px] text-slate-500 flex-shrink-0">{{ formattedDate }}</div>
+      <div class="text-[11px] text-slate-500 flex-shrink-0">{{ formatPostedAt(props.lead.posted_at) }}</div>
     </div>
 
     <div class="mt-2">
@@ -36,34 +36,6 @@ const props = defineProps({
 
 defineEmits(['view-details']);
 
-const scoreBadgeClass = computed(() => {
-  if (props.lead.score >= 90) {
-    return 'bg-mint/80 border-mint text-ink font-bold';
-  }
-  if (props.lead.score > 80) {
-    return 'bg-banana/80 border-banana text-ink font-semibold';
-  }
-  return '';
-});
-
-const timeAgo = (dateString) => {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  const seconds = Math.floor((new Date() - date) / 1000);
-  let interval = seconds / 31536000;
-  if (interval > 1) return Math.floor(interval) + "y ago";
-  interval = seconds / 2592000;
-  if (interval > 1) return Math.floor(interval) + "mo ago";
-  interval = seconds / 86400;
-  if (interval > 1) return Math.floor(interval) + "d ago";
-  interval = seconds / 3600;
-  if (interval > 1) return Math.floor(interval) + "h ago";
-  interval = seconds / 60;
-  if (interval > 1) return Math.floor(interval) + "m ago";
-  return Math.floor(seconds) + "s ago";
-};
-
-const formattedDate = computed(() => timeAgo(props.lead.posted_at));
 </script>
 
 <style scoped>
