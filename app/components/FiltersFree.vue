@@ -7,7 +7,7 @@
       <!-- Header row, small + subtle -->
       <div class="mb-2 flex items-center justify-between">
         <h3 class="text-xs font-semibold text-slate-700">Filters</h3>
-        <span class="inline-flex items-center gap-1 rounded-md bg-slate-900 px-2 py-0.5 text-[10px] font-medium text-white">Pro only</span>
+        <!-- <span class="inline-flex items-center gap-1 rounded-md bg-slate-900 px-2 py-0.5 text-[10px] font-medium text-white">Pro only</span> -->
       </div>
 
       <!-- Content with muted/blurred look -->
