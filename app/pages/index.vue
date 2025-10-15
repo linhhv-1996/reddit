@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Header -->
     <header class="sticky top-0 z-40 border-b border-slate-200/60 bg-white/80 backdrop-blur">
       <div class="mx-auto max-w-5xl px-4">
         <div class="flex h-14 items-center justify-between">
@@ -9,18 +8,14 @@
             <NuxtLink to="/" class="text-sm font-semibold tracking-wide">Lead Scout</NuxtLink>
           </div>
 
-          <!-- Render phần user chỉ trên client để tránh lệch SSR/CSR -->
           <ClientOnly>
             <div class="flex items-center gap-3">
-              <!-- ĐÃ LOGIN -->
               <template v-if="user">
-                <!-- Loading profile -->
                 <div v-if="!profile" class="flex items-center gap-2">
                   <div class="h-5 w-32 bg-slate-200 animate-pulse rounded-md"></div>
                   <div class="h-8 w-20 bg-slate-200 animate-pulse rounded-md"></div>
                 </div>
 
-                <!-- Free user -->
                 <div v-else-if="profile.subscription_status !== 'pro'" class="flex items-center gap-2">
                   <span class="text-sm text-slate-600 truncate max-w-28 sm:max-w-40" :title="user.email">
                     {{ truncatedEmail }}
@@ -33,13 +28,11 @@
                   </button>
                 </div>
 
-                <!-- Pro user (watchEffect sẽ redirect) -->
                 <div v-else class="flex items-center gap-2">
                   <span class="text-sm text-slate-500">Welcome Pro! Redirecting...</span>
                 </div>
               </template>
 
-              <!-- CHƯA LOGIN -->
               <template v-else>
                 <NuxtLink to="/login" class="rounded-xl border border-slate-200 px-3 py-1.5 text-sm hover:bg-slate-50">Log in</NuxtLink>
                 <button @click="showProModal = true" class="rounded-xl bg-ink px-3 py-1.5 text-sm font-semibold text-white hover:opacity-90">Upgrade</button>
@@ -50,7 +43,6 @@
       </div>
     </header>
 
-    <!-- Hero -->
     <section class="mx-auto max-w-5xl px-4 py-8">
       <div class="flex flex-col gap-2">
         <h1 class="max-w-3xl text-2xl md:text-3xl font-extrabold leading-tight">
@@ -62,7 +54,6 @@
       </div>
     </section>
 
-    <!-- Upgrade Bar -->
     <div class="sticky top-14 z-30 border-y border-slate-200/70 bg-white/90 backdrop-blur">
       <div class="mx-auto max-w-5xl px-4 py-2 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         <div class="text-sm"><span class="font-semibold">Pro unlocks</span>: Customize Feeds • AI Filtering • Instant Notifications</div>
@@ -75,31 +66,25 @@
       </div>
     </div>
 
-    <!-- Filters -->
     <FiltersFree @open-pro-modal="showProModal = true" />
 
-    <!-- Feed -->
     <main id="feed" class="mx-auto max-w-5xl px-4 pb-16">
-      <!-- Loading -->
       <div v-if="pending" class="text-center py-10 text-slate-500">
         Fetching latest leads...
       </div>
-      <!-- Error -->
       <div v-else-if="error" class="text-center py-10 text-red-600 bg-red-50 rounded-lg">
         <p>Could not fetch leads. Please try again later.</p>
         <p class="text-xs mt-1">{{ error.message }}</p>
       </div>
-      <!-- Loaded -->
       <div v-else-if="data && data.leads">
         <div id="feedList" class="flex flex-col gap-3">
           <LeadCard
             v-for="lead in data.leads"
             :key="lead.id"
             :lead="lead"
-            @open-pro-modal="showProModal = true"
+            @view-details="openLeadDetails"
           />
         </div>
-        <!-- Pager -->
         <div v-if="totalPages > 1" id="pager" class="mt-4 flex items-center justify-center gap-2">
           <button
             @click="prevPage"
@@ -120,8 +105,14 @@
       </div>
     </main>
 
-    <!-- Modals -->
     <ProModal :show="showProModal" @close="showProModal = false" />
+    <LeadDetailModal
+      :show="showDetailModal"
+      :lead="selectedLead"
+      :is-pro="false"
+      @close="closeLeadDetails"
+      @open-pro-modal="openProUpgradeModal"
+    />
   </div>
 </template>
 
@@ -130,6 +121,7 @@ import { ref, computed, watch, onMounted, onUnmounted, watchEffect } from 'vue';
 import LeadCard from '~/components/LeadCard.vue';
 import FiltersFree from '~/components/FiltersFree.vue';
 import ProModal from '~/components/ProModal.vue';
+import LeadDetailModal from '~/components/LeadDetailModal.vue';
 
 useHead({
   title: 'Lead Scout – The Open Dealflow Portal',
@@ -138,12 +130,29 @@ useHead({
   ]
 });
 
+// --- Modal State ---
+const showProModal = ref(false);
+const showDetailModal = ref(false);
+const selectedLead = ref(null);
+
+function openLeadDetails(lead) {
+  selectedLead.value = lead;
+  showDetailModal.value = true;
+}
+function closeLeadDetails() {
+  showDetailModal.value = false;
+  selectedLead.value = null;
+}
+function openProUpgradeModal() {
+  closeLeadDetails(); // Đóng modal chi tiết trước
+  showProModal.value = true; // Mở modal nâng cấp
+}
+
+
 const user = useSupabaseUser();
 const client = useSupabaseClient();
 const router = useRouter();
 const profile = ref(null);
-
-const showProModal = ref(false);
 
 // Đồng bộ user ở client sau khi mounted + lắng nghe thay đổi auth
 onMounted(async () => {
@@ -210,13 +219,11 @@ const totalPages = computed(() => {
 
 const handleLogout = async () => {
   try {
-    // 1) Gọi signOut global để revoke mọi phiên (web + provider nếu hỗ trợ)
     const { error } = await client.auth.signOut({ scope: 'global' }); 
     if (error) {
       console.error('Error logging out:', error);
     }
 
-    // 3) Chờ session thực sự null để tránh race condition
     const waitForNullSession = async () => {
       for (let i = 0; i < 10; i++) {
         const { data: { session } } = await client.auth.getSession();
@@ -227,14 +234,11 @@ const handleLogout = async () => {
     };
     await waitForNullSession();
 
-    // 4) Dọn state reactivity ngay (tránh UI nháy)
     user.value = null;
 
-    // 5) Hard redirect để reset toàn bộ app state
     window.location.assign('/login');
   } catch (e) {
     console.error('Logout fatal:', e);
-    // fallback an toàn
     window.location.assign('/login');
   }
 };

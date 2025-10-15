@@ -14,6 +14,14 @@ body {
     pointer-events: none;
 }
 
+.badge-gold {
+  @apply bg-banana/80 border-banana text-ink font-semibold;
+}
+.badge-diamond {
+  @apply bg-mint/80 border-mint text-ink font-bold;
+}
+
+
 /* Pro page specific styles */
 .btn-like.active {
     background: #ECFDF5;

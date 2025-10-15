@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
   // --- Build Query ---
   let leadsQuery = supabase
     .from('leads')
-    .select('id, title, summary, author, subreddit, url, posted_at, score, engagement_details, intent');
+    .select('*');
     
   let countQuery = supabase
     .from('leads')

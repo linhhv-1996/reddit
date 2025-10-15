@@ -1,5 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  safelist: [
+    'bg-banana/80',
+    'border-banana',
+    'font-semibold',
+    'bg-mint/80',
+    'border-mint',
+    'font-bold',
+    'text-ink',
+  ],
   theme: {
     extend: {
       fontFamily: {
