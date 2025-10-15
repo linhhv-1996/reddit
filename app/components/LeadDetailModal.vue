@@ -13,7 +13,7 @@
               <span class="badge" :class="getScoreBadgeClass(lead.score)">Score: {{ lead.score }}</span>
             </div>
           </div>
-          <button @click="$emit('close')" class="rounded-md border border-slate-200 px-2 py-1 text-xs hover:bg-slate-50">Esc</button>
+          <button @click="$emit('close')" class="rounded-md border border-slate-200 px-2 py-1 text-xs hover:bg-slate-50">✖️</button>
         </div>
 
         <div class="mt-4 space-y-4">

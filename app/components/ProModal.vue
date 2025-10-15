@@ -8,7 +8,7 @@
             <h3 class="text-lg font-bold">Unlock Pro</h3>
             <p class="mt-1 text-sm text-slate-600">Get full access to high-score leads, powerful filters, customize feeds, and instant Telegram alerts.</p>
           </div>
-          <button @click="$emit('close')" class="rounded-md border border-slate-200 px-2 py-1 text-xs hover:bg-slate-50">Esc</button>
+          <button @click="$emit('close')" class="rounded-md border border-slate-200 px-2 py-1 text-xs hover:bg-slate-50">✖️</button>
         </div>
         <div class="mt-4 flex items-center gap-2">
           <span class="rounded-md bg-ink px-2 py-1 text-xs font-semibold text-white">$19/M</span>
