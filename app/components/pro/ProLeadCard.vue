@@ -2,7 +2,7 @@
   <article class="card rounded-xl border border-slate-200 bg-white p-3 md:p-4 cursor-pointer hover:border-ink/50" @click="$emit('view-details', lead)">
     <div class="flex items-center justify-between gap-3">
       <div class="flex items-center gap-2 flex-wrap">
-        <span class="badge">{{ lead.subreddit }}</span>
+        <span class="badge">r/{{ lead.subreddit }}</span>
         <span v-if="lead.intent" class="badge">Intent: {{ lead.intent }}</span>
         <span class="badge" :class="getScoreBadgeClass(lead.score)">Score: {{ lead.score }}</span>
       </div>
