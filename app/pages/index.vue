@@ -57,7 +57,7 @@
           Stop scrolling endlessly. Our AI finds prospects discussing problems you can solve and delivers them to you.
         </h1>
         <p class="max-w-3xl text-sm text-slate-600">
-          A public, real-time portal of AI-vetted leads from Reddit. Free users can browse the stream; Pro unlocks filters, private feeds, and instant Telegram notifications.
+          A public, real-time portal of AI-vetted leads from Reddit. Free users can browse the stream; Pro unlocks filters, customize feeds, and instant Telegram notifications.
         </p>
       </div>
     </section>
@@ -65,7 +65,7 @@
     <!-- Upgrade Bar -->
     <div class="sticky top-14 z-30 border-y border-slate-200/70 bg-white/90 backdrop-blur">
       <div class="mx-auto max-w-5xl px-4 py-2 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-        <div class="text-sm"><span class="font-semibold">Pro unlocks</span>: Private Feeds • AI Filtering • Instant Notifications</div>
+        <div class="text-sm"><span class="font-semibold">Pro unlocks</span>: Customize Feeds • AI Filtering • Instant Notifications</div>
         <div class="flex items-center gap-2">
           <button @click="showProModal = true" class="rounded-lg bg-banana px-3 py-1.5 text-sm font-semibold text-ink shadow-soft hover:opacity-90">
             Upgrade to Pro
@@ -134,7 +134,7 @@ import ProModal from '~/components/ProModal.vue';
 useHead({
   title: 'Lead Scout – The Open Dealflow Portal',
   meta: [
-    { name: 'description', content: 'A live, public portal of AI-vetted leads from Reddit. Browse now, upgrade to Pro to unlock filters, private feeds, and instant Telegram notifications.' }
+    { name: 'description', content: 'A live, public portal of AI-vetted leads from Reddit. Browse now, upgrade to Pro to unlock filters, customize feeds, and instant Telegram notifications.' }
   ]
 });
 
