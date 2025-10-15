@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+body {
+    @apply min-h-full bg-white text-ink antialiased;
+}
+
+.card {
+    box-shadow: 0 1px 2px rgba(15,23,42,.06), 0 6px 24px rgba(15,23,42,.06);
+}
+
+.blur-locked {
+    filter: blur(4px);
+    user-select: none;
+    pointer-events: none;
+}
+
+/* Pro page specific styles */
+.btn-like.active {
+    background: #ECFDF5;
+    color: #065F46;
+    border-color: #A7F3D0;
+}
+.btn-dislike.active {
+    background: #FEF2F2;
+    color: #991B1B;
+    border-color: #FECACA;
+}
+.btn-bookmark.active {
+    background: #FFF9DB;
+    border-color: #FFE66D;
+}
