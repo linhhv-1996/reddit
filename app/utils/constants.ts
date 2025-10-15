@@ -3,7 +3,7 @@ export const defaultFilters = {
   subreddit: '',
   intent: '',
   minScore: '40',
-  sortBy: 'score',
+  sortBy: 'newest',
 };
 
 export const pageSize = 8;

@@ -10,7 +10,7 @@
             <span class="hidden md:inline-flex items-center rounded-md bg-mint/50 px-2 py-0.5 text-[11px] font-medium">PRO</span>
           </div>
 
-          <!-- Account section updated for consistency -->
+          <!-- Account section -->
           <div v-if="isMounted && user" class="flex items-center gap-2">
             <span class="text-sm text-slate-600 truncate max-w-28 sm:max-w-40" :title="user.email">
                 {{ truncateText(user?.email) }}
@@ -42,12 +42,11 @@
 
         <!-- Tab panes -->
         <div class="mt-4">
-          <KeepAlive>
-            <FeedTab v-if="activeTab === 'feed'" />
-            <BookmarksTab v-else-if="activeTab === 'bookmarks'" />
-            <AnalyticsTab v-else-if="activeTab === 'analytics'" />
-            <SettingsTab v-else-if="activeTab === 'settings'" />
-          </KeepAlive>
+          <!-- Removed <KeepAlive> to ensure components re-render and re-fetch data on tab switch -->
+          <FeedTab v-if="activeTab === 'feed'" />
+          <BookmarksTab v-else-if="activeTab === 'bookmarks'" />
+          <AnalyticsTab v-else-if="activeTab === 'analytics'" />
+          <SettingsTab v-else-if="activeTab === 'settings'" />
         </div>
       </section>
     </main>
@@ -78,7 +77,6 @@ const router = useRouter();
 
 const activeTab = ref('feed');
 
-// Added isMounted to prevent hydration issues
 const isMounted = ref(false);
 onMounted(() => {
   isMounted.value = true;
@@ -100,4 +98,3 @@ const handleLogout = async () => {
   await router.replace('/');
 };
 </script>
-

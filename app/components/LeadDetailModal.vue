@@ -37,9 +37,10 @@
           <div v-if="isPro" class="flex items-center gap-3">
             <button
               @click="$emit('toggleBookmark', lead.id)"
-              :class="['btn-bookmark', { 'active': isBookmarked }]"
+              :disabled="isBookmarkLoading"
+              :class="['btn-bookmark', { 'active': isBookmarked }, { 'opacity-50 cursor-wait': isBookmarkLoading }]"
             >
-              {{ isBookmarked ? '⭐ Bookmarked' : '☆ Bookmark' }}
+              {{ isBookmarkLoading ? '...' : (isBookmarked ? '⭐ Bookmarked' : '☆ Bookmark') }}
             </button>
             <div class="flex items-center gap-2">
               <button
@@ -77,35 +78,31 @@
 <script setup>
 import { computed } from 'vue';
 
-
 const props = defineProps({
   show: Boolean,
   lead: { type: Object, default: null },
   isPro: { type: Boolean, default: false },
   feedbackStatus: { type: String, default: '' },
   isBookmarked: { type: Boolean, default: false },
+  isBookmarkLoading: { type: Boolean, default: false }, // Prop to show loading state
 });
 
 defineEmits(['close', 'openProModal', 'toggleBookmark', 'setFeedback']);
 
-
 const truncatedAiReasoning = computed(() => {
-  // Nếu là Pro hoặc không có text, trả về toàn bộ
+  // If user is Pro or there's no reasoning, return the full text
   if (props.isPro || !props.lead?.reasoning || props.lead.score < 80) {
     return props.lead?.reasoning;
   }
   
-  // Lấy khoảng 100 ký tự đầu tiên để làm "mồi"
+  // Create a teaser of the first 100 characters
   const teaser = props.lead.reasoning.substring(0, 100);
   return teaser + '...';
 });
-
-
 </script>
 
 <style scoped>
 .badge {
-  /* `bg-white` đã được chuyển vào logic của computed property */
   @apply inline-flex items-center gap-1 rounded-md border border-slate-200 px-2 py-0.5 text-[11px] font-medium;
 }
 .btn-like, .btn-dislike, .btn-bookmark {

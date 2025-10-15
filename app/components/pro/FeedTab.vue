@@ -40,8 +40,9 @@
       :is-pro="true"
       :feedback-status="selectedLead ? (feedback[selectedLead.id] || '') : ''"
       :is-bookmarked="selectedLead ? bookmarks.has(selectedLead.id) : false"
+      :is-bookmark-loading="isBookmarkLoading"
       @close="closeLeadDetails"
-      @toggle-bookmark="handleToggleBookmark"
+      @toggle-bookmark="toggleBookmark"
       @set-feedback="handleSetFeedback"
     />
 
@@ -52,7 +53,12 @@
 import { ref, computed, watch } from 'vue';
 import ProLeadCard from '~/components/pro/ProLeadCard.vue';
 import FiltersPro from '~/components/pro/FiltersPro.vue';
-import LeadDetailModal from '~/components/LeadDetailModal.vue'; // Import modal mới
+import LeadDetailModal from '~/components/LeadDetailModal.vue'; 
+import { defaultFilters, pageSize } from '~/utils/constants';
+import { useBookmarks } from '~/composables/useBookmarks'; // Import the composable
+
+// --- Use shared state and actions from the composable ---
+const { bookmarks, toggleBookmark, isLoading: isBookmarkLoading } = useBookmarks();
 
 // --- Modal State ---
 const showDetailModal = ref(false);
@@ -67,24 +73,15 @@ function closeLeadDetails() {
 }
 
 
-// --- State Management for Interactions ---
+// --- Local State for Feedback ---
 const feedback = ref({}); // { lead_id: 'like' | 'dislike' }
-const bookmarks = ref(new Set()); // Set of bookmarked lead_ids
-
-function handleToggleBookmark(leadId) {
-  if (bookmarks.value.has(leadId)) bookmarks.value.delete(leadId);
-  else bookmarks.value.add(leadId);
-}
-
 function handleSetFeedback({ leadId, type }) {
   if (feedback.value[leadId] === type) delete feedback.value[leadId];
   else feedback.value[leadId] = type;
 }
 
 // --- Data Fetching & Filtering ---
-
 const filters = ref({ ...defaultFilters });
-
 const currentPage = ref(1);
 
 const apiUrl = computed(() => {
