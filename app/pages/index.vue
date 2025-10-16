@@ -83,6 +83,7 @@
             :key="lead.id"
             :lead="lead"
             @view-details="openLeadDetails"
+            @open-upgrade-modal="showProModal = true"
           />
         </div>
         <div v-if="totalPages > 1" id="pager" class="mt-4 flex items-center justify-center gap-2">
@@ -109,7 +110,7 @@
     <LeadDetailModal
       :show="showDetailModal"
       :lead="selectedLead"
-      :is-pro="false"
+      :is-pro="true"
       @close="closeLeadDetails"
       @open-pro-modal="openProUpgradeModal"
     />
